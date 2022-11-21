@@ -66,7 +66,9 @@ public class HorizontalDiagram extends View {
 
         changeAxis(canvas, scale_parameter, xMin, xMax, yMin, yMax, axisX_offset, axisY_offset);
 
-        canvas.drawCircle(0, 0, 0.25F, paint);
+        paint.setColor(Color.GREEN);
+        canvas.drawLine(0F, 0F, 10F, 0F, paint);
+
         // axis X and Y
         printWithScale_AxisX(
                 canvas, xMin, xMax, yMin, yMax,
