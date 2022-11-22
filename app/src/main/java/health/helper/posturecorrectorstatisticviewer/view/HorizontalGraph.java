@@ -10,30 +10,32 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class HorizontalDiagram extends View {
+public class HorizontalGraph extends View {
+
+    // ---Data---\
+    private Map<Integer, Float> graphData =
+            Map.of(1, 1F, 2, 2F, 3, 3F);
+    // ---Data---/
 
     // ---Private members---\
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Map<Integer, Float> graph_data =
-            Map.of(1, 1F, 2, 2F, 3, 3F);
     private final GraphDesignElements designElements =
             new GraphDesignElements(0.1F);
-    private GraphSettings graphSettings;
+    private CustomGraph customGraph = new CustomGraph();
     // ---Private members---/
 
-    public HorizontalDiagram(Context context) {
+    public HorizontalGraph(Context context) {
         super(context);
 
     }
 
-    public HorizontalDiagram(Context context, @Nullable AttributeSet attrs) {
+    public HorizontalGraph(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public HorizontalDiagram(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public HorizontalGraph(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -87,8 +89,36 @@ public class HorizontalDiagram extends View {
 //                graph_data.size());
 
         // NEW VERSION
+        paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(20F);
+
+//        canvas.translate(0, getHeight());
+
+        // circle in (0, 0)
+        canvas.drawCircle(0F, 0F, 100F, paint);
+        // axis x
+        canvas.drawLine(0F, 0F, 100F, 0F, paint);
+        // axis y
+        canvas.drawLine(0F, 0F, 0F, 100F, paint);
+
         createWorkspace(canvas, 10F, 10F);
 
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(0.1F);
+        // circle in (0, 0)
+        canvas.drawCircle(0F, 0F, 10F, paint);
+        // axis x
+        canvas.drawLine(0F, 0F, 10F, 0F, paint);
+        // axis y
+        canvas.drawLine(0F, 0F, 0F, 10F, paint);
+
+//        customGraph.setSettings(
+//                canvas, designElements, 0.5F, 0.5F,
+//                10F - 1F, 10F - 1F,
+//                0, graphData.size(), 0.5F
+//        );
+//        customGraph.printAxes();
+//        customGraph.printDiagramData(graphData);
 
         // ---Diagram printing end---
         canvas.restore();
@@ -152,6 +182,7 @@ public class HorizontalDiagram extends View {
                               float xAxisLength, float yAxisLength) {
 
         // Version for class variant
+        canvas.translate(0F, canvas.getHeight());
         canvas.scale(scale_parameter / xAxisLength,
                 -scale_parameter / yAxisLength);
     }
@@ -270,9 +301,11 @@ public class HorizontalDiagram extends View {
         changeAxis(canvas, scale_parameter, xAxisScale, yAxisScale);
     }
 
-    protected class GraphSettings {
+    protected class CustomGraph {
         // TODO: void construcor, make setter for only one class allocate
-        public GraphSettings(@NonNull Canvas canvas,
+        public CustomGraph() {}
+
+        public void setSettings(@NonNull Canvas canvas,
                 GraphDesignElements visualSettings_,
                 float xOffsetFromOrigin_, float yOffsetFromOrigin_,
                 float xAxisLength_, float yAxisLength_,
@@ -299,7 +332,7 @@ public class HorizontalDiagram extends View {
             printedRowThickness = printedRowThickness_;
         }
 
-        private void printAxes() {
+        public void printAxes() {
             printWithScale_AxisX(
                     workCanvas,
                     xOffsetFromOrigin, xOffsetFromOrigin + yAxisLength,
@@ -314,20 +347,59 @@ public class HorizontalDiagram extends View {
             );
         }
 
-        private void changeCoordinateSystemToGraph() {
+        public void changeCoordinateSystemToGraph() {
             // Must be braced with Canvas save and restore methods!
             workCanvas.translate(xOffsetFromOrigin, yOffsetFromOrigin);
         }
 
-        final private Canvas workCanvas;
-        final private GraphDesignElements visualSettings;
-        final public float xOffsetFromOrigin;
-        final public float yOffsetFromOrigin;
-        final public float xAxisLength;
-        final public float yAxisLength;
-        final public int xScaleCount;
-        final public int yScaleCount;
-        final public float printedRowThickness;
+        public void printDiagramData(Map<Integer, Float> graphData) {
+            // Исходя из личных предпочтений о "гармонии и красоте"
+            // выбирается значение workspace_share (0 < workspace_share <= (axsiMax - axisMin)) -
+            // это значение обозначает долю области от общего пространства,
+            // которую может занимать горизонтальная полоска.
+            // Максимальное значение в данных диаграмы заполняет workspace_share на 100%,
+            // остальные значения длины полоски при отрисовке из данных пересчитываются
+            // относительно макимума по формуле: (val / max_val) * workspace_share
+
+            float workspace_share = 0.8F;
+            float workspace_len = xAxisLength * workspace_share;
+
+            float distanceBetweenScales_y = yAxisLength / (yScaleCount + 1);
+
+            int curScale;
+            float curValue;
+            float curLength;
+            float distanceFromAxisOX;
+            paint.setColor(Color.RED);
+
+            float maxValue = getMaximumValueFromMap(graphData);
+
+            for (Map.Entry<Integer, Float> entry: graphData.entrySet()) {
+                curScale = entry.getKey();
+                curValue = entry.getValue();
+
+                curLength = (curValue / maxValue) * workspace_len;
+                distanceFromAxisOX = distanceBetweenScales_y * curScale;
+
+                workCanvas.drawLine(
+                        xOffsetFromOrigin,
+                        yOffsetFromOrigin + distanceFromAxisOX,
+                        xOffsetFromOrigin + curLength,
+                        yOffsetFromOrigin + distanceFromAxisOX,
+                        paint
+                );
+            }
+        }
+
+        private Canvas workCanvas;
+        private GraphDesignElements visualSettings;
+        public float xOffsetFromOrigin;
+        public float yOffsetFromOrigin;
+        public float xAxisLength;
+        public float yAxisLength;
+        public int xScaleCount;
+        public int yScaleCount;
+        public float printedRowThickness;
         // PLus colour presets;
     }
 
