@@ -22,7 +22,7 @@ public class HorizontalGraph extends View {
     // ---Private members---\
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final GraphDesignElements designElements =
-            new GraphDesignElements(0.1F);
+            new GraphDesignElements(0.1F, 0.1F, 0.1F);
     private CustomGraph customGraph = new CustomGraph();
     // ---Private members---/
 
@@ -65,8 +65,8 @@ public class HorizontalGraph extends View {
                 10F - 1F, 10F - 1F,
                 0, graphData.size(), 1F
         );
-        customGraph.printAxes();
         customGraph.printDiagramData(graphData);
+        customGraph.printAxes();
 
 
         // ---Diagram printing end---
@@ -75,56 +75,68 @@ public class HorizontalGraph extends View {
 
     protected void changeAxis(@NonNull Canvas canvas, float scale_parameter,
                               float xAxisLength, float yAxisLength) {
-
-        // Version for class variant
         canvas.translate(0F, canvas.getHeight());
         canvas.scale(scale_parameter / xAxisLength,
                 -scale_parameter / yAxisLength);
     }
 
-    protected void printWithScale_AxisX(@NonNull Canvas canvas,
-                                        float xStart, float xFinish,
-                                        float yStart, float yFinish,
-                                        float thickness,
-                                        int scaleCount) {
-        // Version for class variant
+    protected void printWithScaleAxisX(@NonNull Canvas canvas,
+                                       float xStart, float xFinish,
+                                       float yStart, float yFinish,
+                                       int scaleCount,
+                                       @NonNull GraphDesignElements visualSettings) {
         paint.setColor(Color.BLACK);
         canvas.drawLine(xStart, yStart, xFinish, yStart, paint);
 
         // Отметки вдоль оси X
         float axisSize = xFinish - xStart;
         float scaleStep = axisSize / (scaleCount + 1);
+
         paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(visualSettings.axisThickness);
+
         for (int i = 1; i <= scaleCount; i++) {
-            canvas.drawCircle(i * scaleStep, 0F, thickness, paint);
+            canvas.drawCircle(
+                    xStart + i * scaleStep, yStart,
+                    visualSettings.xAxisDotRadius, paint);
         }
 
         // Окончание - стрелка для оси
         // TODO: Для оси X нужна стрелка
     }
 
-    protected void printWithScale_AxisY(@NonNull Canvas canvas,
-                                        float xStart, float xFinish,
-                                        float yStart, float yFinish,
-                                        float thickness,
-                                        int scaleCount) {
-        // Version for class variant
+    protected void printWithScaleAxisY(@NonNull Canvas canvas,
+                                       float xStart, float xFinish,
+                                       float yStart, float yFinish,
+                                       int scaleCount,
+                                       @NonNull GraphDesignElements visualSettings) {
         paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setStrokeWidth(visualSettings.axisThickness);
+
+        // (0, 0) dot
+        canvas.drawCircle(xStart, yStart, visualSettings.yAxisDotRadius, paint);
+
+        // Axis Y
         canvas.drawLine(xStart, yStart, xFinish, yFinish, paint);
 
-        // Отметки вдоль оси Y
+        // Scale in Y
         float axisSize = yFinish - yStart;
         float scaleStep = axisSize / (scaleCount + 1);
-        paint.setColor(Color.BLACK);
+
         for (int i = 1; i <= scaleCount; i++) {
-            canvas.drawCircle(xStart, i * scaleStep, thickness, paint);
+            canvas.drawCircle(
+                    xStart, yStart + i * scaleStep,
+                    visualSettings.yAxisDotRadius, paint);
         }
 
         // Окончание - стрелка для оси
         // Для оси Y нужна просто черточка/точка
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(xStart, yFinish, thickness * 2.5F, paint);
+        canvas.drawCircle(
+                xStart, yFinish,
+                visualSettings.yAxisDotRadius * 2F, paint);
     }
 
     protected void printDiagramData(Canvas canvas, Map<Integer, Float> graph_data,
@@ -228,17 +240,17 @@ public class HorizontalGraph extends View {
         }
 
         public void printAxes() {
-            printWithScale_AxisX(
+            printWithScaleAxisX(
                     workCanvas,
                     xOffsetFromOrigin, xOffsetFromOrigin + xAxisLength,
                     yOffsetFromOrigin, yOffsetFromOrigin,
-                    visualSettings.axisThickness, xScaleCount
+                    xScaleCount, visualSettings
             );
-            printWithScale_AxisY(
+            printWithScaleAxisY(
                     workCanvas,
                     xOffsetFromOrigin, xOffsetFromOrigin,
                     yOffsetFromOrigin, yOffsetFromOrigin + yAxisLength,
-                    visualSettings.axisThickness, yScaleCount
+                    yScaleCount, visualSettings
             );
         }
 
@@ -299,10 +311,17 @@ public class HorizontalGraph extends View {
     }
 
     protected class GraphDesignElements {
-        public GraphDesignElements(float axisThickness_) {
+        public GraphDesignElements(
+                float axisThickness_,
+                float xAxisDotRadius_,
+                float yAxisDotRadius_) {
             axisThickness = axisThickness_;
+            xAxisDotRadius = xAxisDotRadius_;
+            yAxisDotRadius = yAxisDotRadius_;
         }
 
         final public float axisThickness;
+        final public float xAxisDotRadius;
+        final public float yAxisDotRadius;
     }
 }
