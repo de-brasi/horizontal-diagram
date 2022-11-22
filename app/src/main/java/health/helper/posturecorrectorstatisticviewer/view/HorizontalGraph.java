@@ -58,125 +58,20 @@ public class HorizontalGraph extends View {
         // ---Diagram printing start---
 
 
-        // LEGACY
-//        float xMax = 10F;   // axis X size
-//        float xMin = 0F;
-//        float yMax = 10F;   // axis Y size
-//        float yMin = 0F;
-//
-//        float xEndingOffset = 1F;
-//        float yEndingOffset = 1F;
-//
-//        float width = getWidth();
-//        float height = getHeight();
-//        float scale_parameter = Math.min(width, height); // what size chosen as standard
-//
-//        changeAxis(canvas, scale_parameter, xMin, xMax, yMin, yMax, axisX_offset, axisY_offset);
-//
-//        // axis X and Y
-//        printWithScale_AxisX(
-//                canvas, xMin, xMax, yMin, yMax,
-//                xEndingOffset, asxisStrokeWidth, 3);
-//        printWithScale_AxisY(
-//                canvas, xMin, xMax, yMin, yMax,
-//                yEndingOffset, asxisStrokeWidth, 3);
-//
-//        // Graph data printing
-//        printDiagramData(
-//                canvas, graph_data,
-//                0F, 0F,
-//                xMax - xMin - xEndingOffset, yMax - yMin - yEndingOffset,
-//                graph_data.size());
-
-        // NEW VERSION
-        paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(20F);
-
-//        canvas.translate(0, getHeight());
-
-        // circle in (0, 0)
-        canvas.drawCircle(0F, 0F, 100F, paint);
-        // axis x
-        canvas.drawLine(0F, 0F, 100F, 0F, paint);
-        // axis y
-        canvas.drawLine(0F, 0F, 0F, 100F, paint);
-
         createWorkspace(canvas, 10F, 10F);
 
-        paint.setColor(Color.RED);
-        paint.setStrokeWidth(0.1F);
-        // circle in (0, 0)
-        canvas.drawCircle(0F, 0F, 10F, paint);
-        // axis x
-        canvas.drawLine(0F, 0F, 10F, 0F, paint);
-        // axis y
-        canvas.drawLine(0F, 0F, 0F, 10F, paint);
+        customGraph.setSettings(
+                canvas, designElements, 0.5F, 0.5F,
+                10F - 1F, 10F - 1F,
+                0, graphData.size(), 1F
+        );
+        customGraph.printAxes();
+        customGraph.printDiagramData(graphData);
 
-//        customGraph.setSettings(
-//                canvas, designElements, 0.5F, 0.5F,
-//                10F - 1F, 10F - 1F,
-//                0, graphData.size(), 0.5F
-//        );
-//        customGraph.printAxes();
-//        customGraph.printDiagramData(graphData);
 
         // ---Diagram printing end---
         canvas.restore();
     }
-
-    // /---------------------LEGACY------------------\
-    protected void changeAxis(@NonNull Canvas canvas, float scale_parameter,
-                              float xMin, float xMax, float yMin, float yMax,
-                              float xOffset, float yOffset) {
-        canvas.scale(scale_parameter / (xMax - xMin),
-                -scale_parameter / (yMax - yMin));
-        canvas.translate(-xMin + xOffset, -yMax + yOffset);
-    }
-
-    protected void printWithScale_AxisX(@NonNull Canvas canvas,
-                                        float xMin, float xMax,
-                                        float yMin, float yMax,
-                                        float endingOffset,
-                                        float thickness,
-                                        int scaleCount) {
-        paint.setColor(Color.BLACK);
-        canvas.drawLine(xMin, yMin, xMax - endingOffset, yMin, paint);
-
-        // Отметки вдоль оси X
-        float axisSize = (xMax - endingOffset) - xMin;
-        float scaleStep = axisSize / (scaleCount + 1);
-        paint.setColor(Color.BLACK);
-        for (int i = 1; i <= scaleCount; i++) {
-            canvas.drawCircle(i * scaleStep, 0F, thickness, paint);
-        }
-
-        // Окончание - стрелка для оси
-        // Для оси X нужна стрелка
-    }
-
-    protected void printWithScale_AxisY(@NonNull Canvas canvas, float xMin, float xMax,
-                                        float yMin, float yMax,
-                                        float endingOffset,
-                                        float thickness,
-                                        int scaleCount) {
-        paint.setColor(Color.BLACK);
-        canvas.drawLine(xMin, yMin, xMin, yMax - endingOffset, paint);
-
-        // Отметки вдоль оси Y
-        float axisSize = (yMax - endingOffset) - yMin;
-        float scaleStep = axisSize / (scaleCount + 1);
-        paint.setColor(Color.BLACK);
-        for (int i = 1; i <= scaleCount; i++) {
-            canvas.drawCircle(0F, i * scaleStep, thickness, paint);
-        }
-
-        // Окончание - стрелка для оси
-        // Для оси Y нужна просто черточка/точка
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(xMin, axisSize, thickness * 2.5F, paint);
-    }
-    // \---------------------LEGACY------------------/
 
     protected void changeAxis(@NonNull Canvas canvas, float scale_parameter,
                               float xAxisLength, float yAxisLength) {
@@ -222,14 +117,14 @@ public class HorizontalGraph extends View {
         float scaleStep = axisSize / (scaleCount + 1);
         paint.setColor(Color.BLACK);
         for (int i = 1; i <= scaleCount; i++) {
-            canvas.drawCircle(0F, i * scaleStep, thickness, paint);
+            canvas.drawCircle(xStart, i * scaleStep, thickness, paint);
         }
 
         // Окончание - стрелка для оси
         // Для оси Y нужна просто черточка/точка
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(xStart, axisSize, thickness * 2.5F, paint);
+        canvas.drawCircle(xStart, yFinish, thickness * 2.5F, paint);
     }
 
     protected void printDiagramData(Canvas canvas, Map<Integer, Float> graph_data,
@@ -302,7 +197,6 @@ public class HorizontalGraph extends View {
     }
 
     protected class CustomGraph {
-        // TODO: void construcor, make setter for only one class allocate
         public CustomGraph() {}
 
         public void setSettings(@NonNull Canvas canvas,
@@ -329,21 +223,22 @@ public class HorizontalGraph extends View {
             xScaleCount = xScaleCount_;
             yScaleCount = yScaleCount_;
 
+            // The thickness of the figures denoting the value of the graph
             printedRowThickness = printedRowThickness_;
         }
 
         public void printAxes() {
             printWithScale_AxisX(
                     workCanvas,
-                    xOffsetFromOrigin, xOffsetFromOrigin + yAxisLength,
-                    yOffsetFromOrigin, yOffsetFromOrigin + yAxisLength,
+                    xOffsetFromOrigin, xOffsetFromOrigin + xAxisLength,
+                    yOffsetFromOrigin, yOffsetFromOrigin,
                     visualSettings.axisThickness, xScaleCount
             );
             printWithScale_AxisY(
                     workCanvas,
-                    xOffsetFromOrigin, xOffsetFromOrigin + yAxisLength,
+                    xOffsetFromOrigin, xOffsetFromOrigin,
                     yOffsetFromOrigin, yOffsetFromOrigin + yAxisLength,
-                    visualSettings.axisThickness, xScaleCount
+                    visualSettings.axisThickness, yScaleCount
             );
         }
 
