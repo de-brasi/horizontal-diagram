@@ -8,16 +8,18 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.ColorLong;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Map;
+import java.util.Vector;
 
 public class HorizontalGraph extends View {
 
     // ---Data---\
     private Map<Integer, Float> graphData =
-            Map.of(1, 1F, 2, 0F, 3, 3F);
+            Map.of(1, 0.5F, 2, 0F);
     // ---Data---/
 
     // ---Private members---\
@@ -28,6 +30,7 @@ public class HorizontalGraph extends View {
                     0.1F, 0.5F
             );
     private CustomGraph customGraph = new CustomGraph();
+    private ColourScheme colourScheme = new ColourScheme();
     // ---Private members---/
 
     public HorizontalGraph(Context context) {
@@ -46,17 +49,11 @@ public class HorizontalGraph extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        final float asxisStrokeWidth = 0.07F;
-        // отступ начала координат в нормальной системе координат от края холста
-        float axisX_offset = 0.5F;
-        // отступ начала координат в нормальной системе координат от края холста
-        float axisY_offset = -2F;
-
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.GRAY);
         paint.setAntiAlias(true);
-        paint.setStrokeWidth(asxisStrokeWidth);
+
+        // Иначе все начинает наслаиваться
+        // TODO: сделать пересчет толщин, когда полей слишком много ( >10 )
+        assert (graphData.size() <= 10);
 
         canvas.save();
         // ---Diagram printing start---
@@ -112,7 +109,7 @@ public class HorizontalGraph extends View {
         changeAxis(canvas, scale_parameter, xAxisScale, yAxisScale);
     }
 
-    protected class CustomGraph {
+    private class CustomGraph {
         public CustomGraph() {}
 
         public void setSettings(@NonNull Canvas canvas,
@@ -172,11 +169,8 @@ public class HorizontalGraph extends View {
             // остальные значения длины полоски при отрисовке из данных пересчитываются
             // относительно макимума по формуле: (val / max_val) * workspace_share
 
-            // TODO: ending of data-row
-
             paint.setStrokeWidth(visualSettings.dataRowThickness);
             paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.RED);
 
             float workspace_share = designElements.workspaceValue;
             float workspace_len = xAxisLength * workspace_share;
@@ -190,19 +184,27 @@ public class HorizontalGraph extends View {
 
             float maxValue = getMaximumValueFromMap(graphData);
 
+            int colorIdx = 0;
             for (Map.Entry<Integer, Float> entry: graphData.entrySet()) {
+                // Choice color
+                paint.setColor(designElements.colorsForData.elementAt(colorIdx++));
+
                 curScale = entry.getKey();
                 curValue = entry.getValue();
 
                 curLength = (curValue / maxValue) * workspace_len;
+                // Если значение длины нулевое, то отрисовать маленький отрезок
                 curLength = Math.max(curLength, designElements.defaultValueRowLength);
                 distanceFromAxisOX = distanceBetweenScales_y * curScale;
 
                 workCanvas.drawRoundRect(
-                        xOffsetFromOrigin, yOffsetFromOrigin + distanceFromAxisOX + designElements.dataRowThickness / 2,
-                        xOffsetFromOrigin + curLength, yOffsetFromOrigin + distanceFromAxisOX - designElements.dataRowThickness / 2,
-                        0.1F, 0.1F,
-                        paint
+                        xOffsetFromOrigin,
+                        yOffsetFromOrigin +
+                                distanceFromAxisOX + designElements.dataRowThickness / 2,
+                        xOffsetFromOrigin + curLength,
+                        yOffsetFromOrigin +
+                                distanceFromAxisOX - designElements.dataRowThickness / 2,
+                        0.1F, 0.1F, paint
                 );
             }
         }
@@ -278,7 +280,7 @@ public class HorizontalGraph extends View {
         // PLus colour presets;
     }
 
-    protected class GraphDesignElements {
+    private class GraphDesignElements {
         public GraphDesignElements(
                 float axisThickness_,
                 float xAxisDotRadius_,
@@ -297,7 +299,49 @@ public class HorizontalGraph extends View {
 
         final public float dataRowThickness;
 
-        final public float defaultValueRowLength = 0.3F;
+        final public float defaultValueRowLength = 0.4F;
         final public float workspaceValue = 0.8F;
+
+        // TODO: пока пусть тут лежит, потом наверное надо будет куда то вынести
+        final public Vector<Color> colorsForData =
+                colourScheme.generateColors(customGraph.yScaleCount);
+    }
+
+    private class ColourScheme {
+        public ColourScheme() {
+            // TODO: constructor from brightness value or pastel color level
+            colorsSet = new Vector<Color>();
+            colorsSet.add(Color.valueOf(Color.rgb(220, 32, 101)));
+            colorsSet.add(Color.valueOf(Color.rgb(32, 145, 220)));
+            colorsSet.add(Color.valueOf(Color.rgb(220, 32, 220)));
+            colorsSet.add(Color.valueOf(Color.rgb(58, 79, 149)));
+            colorsSet.add(Color.valueOf(Color.rgb(149, 58, 92)));
+            colorsSet.add(Color.valueOf(Color.rgb(58, 149, 134)));
+            colorsSet.add(Color.valueOf(Color.rgb(223, 113, 73)));
+            colorsSet.add(Color.valueOf(Color.rgb(53, 202, 202)));
+            colorsSet.add(Color.valueOf(Color.rgb(92, 73, 222)));
+            colorsSet.add(Color.valueOf(Color.rgb(46, 210, 123)));
+        }
+
+        @NonNull
+        Vector<Color> generateColors(int count) {
+            Vector<Color> result = new Vector<Color>(count);
+
+            for (int i = 0; i < count; i++) {
+                result.add(colorsSet.get(i));
+            }
+
+            return colorsSet;
+        }
+
+        // Все цвета можно рассматривать как некоторая точка в трехмерном кубе RGB
+        // Некоторый абстрактный показатель яркость (brightness)
+        // задает уравнение в этом кубе: r + g + b = brightness,
+        // что обозначает, как близка задаваемая плоскость к точке (255, 255, 255)
+        // - абсолютный белый цвет.
+        // TODO: color generator
+        private final int brightness = 0;
+
+        private final Vector<Color> colorsSet;
     }
 }
