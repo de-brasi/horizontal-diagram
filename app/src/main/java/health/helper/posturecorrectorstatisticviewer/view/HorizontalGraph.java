@@ -12,6 +12,7 @@ import androidx.annotation.ColorLong;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -187,7 +188,8 @@ public class HorizontalGraph extends View {
             int colorIdx = 0;
             for (Map.Entry<Integer, Float> entry: graphData.entrySet()) {
                 // Choice color
-                paint.setColor(designElements.colorsForData.elementAt(colorIdx++));
+//                paint.setColor(designElements.colorsForData.elementAt(colorIdx++));
+                paint.setColor(Color.RED);
 
                 curScale = entry.getKey();
                 curValue = entry.getValue();
@@ -303,29 +305,40 @@ public class HorizontalGraph extends View {
         final public float workspaceValue = 0.8F;
 
         // TODO: пока пусть тут лежит, потом наверное надо будет куда то вынести
-        final public Vector<Color> colorsForData =
+        final public Vector<List<Integer>> colorsForData =
                 colourScheme.generateColors(customGraph.yScaleCount);
     }
 
     private class ColourScheme {
         public ColourScheme() {
             // TODO: constructor from brightness value or pastel color level
-            colorsSet = new Vector<Color>();
-            colorsSet.add(Color.valueOf(Color.rgb(220, 32, 101)));
-            colorsSet.add(Color.valueOf(Color.rgb(32, 145, 220)));
-            colorsSet.add(Color.valueOf(Color.rgb(220, 32, 220)));
-            colorsSet.add(Color.valueOf(Color.rgb(58, 79, 149)));
-            colorsSet.add(Color.valueOf(Color.rgb(149, 58, 92)));
-            colorsSet.add(Color.valueOf(Color.rgb(58, 149, 134)));
-            colorsSet.add(Color.valueOf(Color.rgb(223, 113, 73)));
-            colorsSet.add(Color.valueOf(Color.rgb(53, 202, 202)));
-            colorsSet.add(Color.valueOf(Color.rgb(92, 73, 222)));
-            colorsSet.add(Color.valueOf(Color.rgb(46, 210, 123)));
+            colorsSet = new Vector<List<Integer>>();
+
+            colorsSet.add(List.of(220, 32, 101));
+
+            colorsSet.add(List.of(32, 145, 220));
+
+            colorsSet.add(List.of(220, 32, 220));
+
+            colorsSet.add(List.of(58, 79, 149));
+
+            colorsSet.add(List.of(149, 58, 92));
+
+            colorsSet.add(List.of(58, 149, 134));
+
+            colorsSet.add(List.of(223, 113, 73));
+
+            colorsSet.add(List.of(53, 202, 202));
+
+            colorsSet.add(List.of(92, 73, 222));
+
+            colorsSet.add(List.of(46, 210, 123));
+
         }
 
         @NonNull
-        Vector<Color> generateColors(int count) {
-            Vector<Color> result = new Vector<Color>(count);
+        Vector<List<Integer>> generateColors(int count) {
+            Vector<List<Integer>> result = new Vector<List<Integer>>(count);
 
             for (int i = 0; i < count; i++) {
                 result.add(colorsSet.get(i));
@@ -342,6 +355,6 @@ public class HorizontalGraph extends View {
         // TODO: color generator
         private final int brightness = 0;
 
-        private final Vector<Color> colorsSet;
+        private final Vector<List<Integer>> colorsSet;
     }
 }
