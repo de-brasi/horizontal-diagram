@@ -51,13 +51,11 @@ public class HorizontalGraph extends View {
         super.onDraw(canvas);
         paint.setAntiAlias(true);
 
-        // Иначе все начинает наслаиваться
         // TODO: сделать пересчет толщин, когда полей слишком много ( >10 )
+        // Иначе все начинает наслаиваться
         assert (graphData.size() <= 10);
 
         canvas.save();
-        // ---Diagram printing start---
-
 
         createWorkspace(canvas, 10F, 10F);
         customGraph.setSettings(
@@ -70,8 +68,6 @@ public class HorizontalGraph extends View {
         customGraph.printDiagramData(graphData);
         customGraph.printAxes();
 
-
-        // ---Diagram printing end---
         canvas.restore();
     }
 

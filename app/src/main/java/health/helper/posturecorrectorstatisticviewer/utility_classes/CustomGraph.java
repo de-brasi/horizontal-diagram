@@ -45,6 +45,13 @@ public class CustomGraph {
     }
 
     public void printAxes() {
+        paint.setColor(Color.rgb(
+                colourScheme.ROW_COLOR.red,
+                colourScheme.ROW_COLOR.green,
+                colourScheme.ROW_COLOR.blue));
+        paint.setStrokeWidth(visualSettings.axisThickness);
+        paint.setStyle(Paint.Style.FILL);
+
         printWithScaleAxisX(
                 workCanvas,
                 xOffsetFromOrigin, xOffsetFromOrigin + xAxisLength,
@@ -122,10 +129,6 @@ public class CustomGraph {
                                      float yStart, float yFinish,
                                      int scaleCount,
                                      @NonNull GraphDesignElements visualSettings) {
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setStrokeWidth(visualSettings.axisThickness);
-
         canvas.drawLine(xStart, yStart, xFinish, yStart, paint);
 
         // Отметки вдоль оси X
@@ -147,10 +150,6 @@ public class CustomGraph {
                                      float yStart, float yFinish,
                                      int scaleCount,
                                      @NonNull GraphDesignElements visualSettings) {
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setStrokeWidth(visualSettings.axisThickness);
-
         // (0, 0) dot
         canvas.drawCircle(xStart, yStart, visualSettings.yAxisDotRadius, paint);
 
@@ -169,8 +168,6 @@ public class CustomGraph {
 
         // Окончание - стрелка для оси
         // Для оси Y нужна просто черточка/точка
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(
                 xStart, yFinish,
                 visualSettings.yAxisDotRadius * 1.3F, paint);
