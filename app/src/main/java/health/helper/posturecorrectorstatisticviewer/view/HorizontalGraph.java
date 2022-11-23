@@ -18,7 +18,7 @@ public class HorizontalGraph extends View {
 
     // ---Data---\
     private Map<Integer, Float> graphData =
-            Map.of(1, 0.5F, 2, 0F);
+            Map.of(1, 5F, 2, 5F, 3, 5F, 4, 5F, 5, 5F, 6, 5F, 7, 5F, 8, 5F, 9, 5F, 10, 5F);
     // ---Data---/
 
     // ---Private members---\
@@ -170,6 +170,7 @@ public class HorizontalGraph extends View {
 
             paint.setStrokeWidth(visualSettings.dataRowThickness);
             paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.RED);
 
             float workspace_share = designElements.workspaceValue;
             float workspace_len = xAxisLength * workspace_share;
@@ -183,11 +184,15 @@ public class HorizontalGraph extends View {
 
             float maxValue = getMaximumValueFromMap(graphData);
 
-//            int colorIdx = 0;
+            int colorIdx = 0;
+            int redVal, greenVal, blueVal;
             for (Map.Entry<Integer, Float> entry: graphData.entrySet()) {
                 // Choice color
-//                paint.setColor(designElements.colorsForData.elementAt(colorIdx++));
-                paint.setColor(Color.RED);
+                redVal = colourScheme.colorsSet.get(colorIdx).get(0);
+                greenVal = colourScheme.colorsSet.get(colorIdx).get(1);
+                blueVal = colourScheme.colorsSet.get(colorIdx).get(2);
+                paint.setColor(Color.rgb(redVal, greenVal, blueVal));
+                ++colorIdx;
 
                 curScale = entry.getKey();
                 curValue = entry.getValue();
