@@ -42,4 +42,6 @@ public class ColourScheme {
     private final int brightness = 0;
 
     final public ArrayList<CustomColorRGB> colorsSet;
+    final public CustomColorRGB BACKGROUND =
+            new CustomColorRGB(181, 144, 186);
 }

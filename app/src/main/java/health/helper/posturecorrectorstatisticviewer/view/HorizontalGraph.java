@@ -7,6 +7,7 @@ import health.helper.posturecorrectorstatisticviewer.utility_classes.CustomGraph
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -25,12 +26,9 @@ public class HorizontalGraph extends View {
 
     // ---Private members---\
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final GraphDesignElements designElements =
-            new GraphDesignElements(
-                    0.1F, 0.1F,
-                    0.1F, 0.5F
-            );
-//    private CustomGraph customGraph = new CustomGraph(paint);
+    private final GraphDesignElements designElements = new GraphDesignElements(
+            0.1F, 0.1F,
+            0.1F, 0.5F);
     private ColourScheme colourScheme = new ColourScheme();
     private CustomGraph customGraph = new CustomGraph(paint, colourScheme);
     // ---Private members---/
@@ -63,9 +61,9 @@ public class HorizontalGraph extends View {
 
         createWorkspace(canvas, 10F, 10F);
         customGraph.setSettings(
-                canvas, designElements, 0.5F, 0.5F,
-                10F - 1F, 10F - 1F,
-                0, graphData.size(), 1F
+                canvas, designElements, 1.5F, 1.5F,
+                10F - 2.5F, 10F - 2.5F,
+                5, graphData.size(), 1F
         );
 
         // printAxes after diagram data according expected draw order
@@ -95,6 +93,12 @@ public class HorizontalGraph extends View {
         float height = getHeight();
         // what size chosen as standard
         float scale_parameter = Math.min(width, height);
+
+        paint.setColor(Color.rgb(
+                colourScheme.BACKGROUND.red, colourScheme.BACKGROUND.green, colourScheme.BACKGROUND.blue
+        ));
+        paint.setStrokeWidth(20);
+        canvas.drawRoundRect(0, 0, width, height, 75, 75, paint);
 
         changeAxis(canvas, scale_parameter, xAxisScale, yAxisScale);
     }
