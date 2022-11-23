@@ -341,6 +341,8 @@ public class HorizontalGraph extends View {
         // что обозначает, как близка задаваемая плоскость к точке (255, 255, 255)
         // - абсолютный белый цвет.
         // TODO: color generator
+        // TODO: выдавать генераторам цвета согласно отображаемому значению -
+        //  максимуму ошибок боллее агресисвные цвета, минимуму - более "поощряющие"
         private final int brightness = 0;
 
         final public Vector<List<Integer>> colorsSet;
