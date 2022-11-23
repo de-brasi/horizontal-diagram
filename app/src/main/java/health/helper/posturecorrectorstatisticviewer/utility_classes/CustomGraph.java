@@ -90,13 +90,11 @@ public class CustomGraph {
         float maxValue = HelpfulFunctions.getMaximumValueFromMap(graphData);
 
         int colorIdx = 0;
-        int redVal, greenVal, blueVal;
+        CustomColorRGB curColor;
         for (Map.Entry<Integer, Float> entry: graphData.entrySet()) {
             // Choice color
-            redVal = colourScheme.colorsSet.get(colorIdx).get(0);
-            greenVal = colourScheme.colorsSet.get(colorIdx).get(1);
-            blueVal = colourScheme.colorsSet.get(colorIdx).get(2);
-            paint.setColor(Color.rgb(redVal, greenVal, blueVal));
+            curColor = colourScheme.colorsSet.get(colorIdx);
+            paint.setColor(Color.rgb(curColor.red, curColor.green, curColor.blue));
             ++colorIdx;
 
             curScale = entry.getKey();

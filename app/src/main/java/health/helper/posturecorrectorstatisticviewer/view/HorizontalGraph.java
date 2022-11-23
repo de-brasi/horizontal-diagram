@@ -7,7 +7,6 @@ import health.helper.posturecorrectorstatisticviewer.utility_classes.CustomGraph
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;

@@ -1,32 +1,34 @@
 package health.helper.posturecorrectorstatisticviewer.utility_classes;
 
+import health.helper.posturecorrectorstatisticviewer.utility_classes.CustomColorRGB;
+
 import java.util.List;
 import java.util.Vector;
 
 public class ColourScheme {
     public ColourScheme() {
         // TODO: constructor from brightness value or pastel color level
-        colorsSet = new Vector<>();
+        colorsSet = new Vector<CustomColorRGB>();
 
-        colorsSet.add(List.of(220, 32, 101));
+        colorsSet.add(new CustomColorRGB(220, 32, 101));
 
-        colorsSet.add(List.of(32, 145, 220));
+        colorsSet.add(new CustomColorRGB(32, 145, 220));
 
-        colorsSet.add(List.of(220, 32, 220));
+        colorsSet.add(new CustomColorRGB(220, 32, 220));
 
-        colorsSet.add(List.of(58, 79, 149));
+        colorsSet.add(new CustomColorRGB(58, 79, 149));
 
-        colorsSet.add(List.of(149, 58, 92));
+        colorsSet.add(new CustomColorRGB(149, 58, 92));
 
-        colorsSet.add(List.of(58, 149, 134));
+        colorsSet.add(new CustomColorRGB(58, 149, 134));
 
-        colorsSet.add(List.of(223, 113, 73));
+        colorsSet.add(new CustomColorRGB(223, 113, 73));
 
-        colorsSet.add(List.of(53, 202, 202));
+        colorsSet.add(new CustomColorRGB(53, 202, 202));
 
-        colorsSet.add(List.of(92, 73, 222));
+        colorsSet.add(new CustomColorRGB(92, 73, 222));
 
-        colorsSet.add(List.of(46, 210, 123));
+        colorsSet.add(new CustomColorRGB(46, 210, 123));
 
     }
 
@@ -40,5 +42,5 @@ public class ColourScheme {
     //  максимуму ошибок боллее агресисвные цвета, минимуму - более "поощряющие"
     private final int brightness = 0;
 
-    final public Vector<List<Integer>> colorsSet;
+    final public Vector<CustomColorRGB> colorsSet;
 }
