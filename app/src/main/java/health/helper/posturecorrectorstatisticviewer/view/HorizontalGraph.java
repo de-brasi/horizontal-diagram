@@ -11,7 +11,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class HorizontalGraph extends View {
 
@@ -190,7 +192,16 @@ public class HorizontalGraph extends View {
 
             float maxValue = getMaximumValueFromMap(graphData);
 
+            int idxCounter = 0;
+            int redValue, greenValue, blueValue;
             for (Map.Entry<Integer, Float> entry: graphData.entrySet()) {
+                redValue = designElements.colors.get(idxCounter).get(0);
+                greenValue = designElements.colors.get(idxCounter).get(1);
+                blueValue = designElements.colors.get(idxCounter).get(2);
+                ++idxCounter;
+
+                paint.setColor(Color.rgb(redValue, greenValue, blueValue));
+
                 curScale = entry.getKey();
                 curValue = entry.getValue();
 
@@ -288,6 +299,11 @@ public class HorizontalGraph extends View {
             xAxisDotRadius = xAxisDotRadius_;
             yAxisDotRadius = yAxisDotRadius_;
             dataRowThickness = dataRowThickness_;
+
+            colors = new Vector<List<Integer>>();
+            colors.add(List.of(255, 0, 0));
+            colors.add(List.of(0, 255, 0));
+            colors.add(List.of(0, 0, 255));
         }
 
         final public float axisThickness;
@@ -299,5 +315,7 @@ public class HorizontalGraph extends View {
 
         final public float defaultValueRowLength = 0.3F;
         final public float workspaceValue = 0.8F;
+
+        final public Vector<List<Integer>> colors;
     }
 }
