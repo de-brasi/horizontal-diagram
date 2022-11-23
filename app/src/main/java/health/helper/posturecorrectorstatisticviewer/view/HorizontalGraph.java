@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-import androidx.annotation.ColorLong;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -185,7 +183,7 @@ public class HorizontalGraph extends View {
 
             float maxValue = getMaximumValueFromMap(graphData);
 
-            int colorIdx = 0;
+//            int colorIdx = 0;
             for (Map.Entry<Integer, Float> entry: graphData.entrySet()) {
                 // Choice color
 //                paint.setColor(designElements.colorsForData.elementAt(colorIdx++));
@@ -303,16 +301,12 @@ public class HorizontalGraph extends View {
 
         final public float defaultValueRowLength = 0.4F;
         final public float workspaceValue = 0.8F;
-
-        // TODO: пока пусть тут лежит, потом наверное надо будет куда то вынести
-        final public Vector<List<Integer>> colorsForData =
-                colourScheme.generateColors(customGraph.yScaleCount);
     }
 
     private class ColourScheme {
         public ColourScheme() {
             // TODO: constructor from brightness value or pastel color level
-            colorsSet = new Vector<List<Integer>>();
+            colorsSet = new Vector<>();
 
             colorsSet.add(List.of(220, 32, 101));
 
@@ -336,17 +330,6 @@ public class HorizontalGraph extends View {
 
         }
 
-        @NonNull
-        Vector<List<Integer>> generateColors(int count) {
-            Vector<List<Integer>> result = new Vector<List<Integer>>(count);
-
-            for (int i = 0; i < count; i++) {
-                result.add(colorsSet.get(i));
-            }
-
-            return colorsSet;
-        }
-
         // Все цвета можно рассматривать как некоторая точка в трехмерном кубе RGB
         // Некоторый абстрактный показатель яркость (brightness)
         // задает уравнение в этом кубе: r + g + b = brightness,
@@ -355,6 +338,6 @@ public class HorizontalGraph extends View {
         // TODO: color generator
         private final int brightness = 0;
 
-        private final Vector<List<Integer>> colorsSet;
+        final public Vector<List<Integer>> colorsSet;
     }
 }
