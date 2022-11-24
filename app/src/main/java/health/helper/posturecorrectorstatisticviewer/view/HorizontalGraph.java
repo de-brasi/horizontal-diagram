@@ -58,7 +58,8 @@ public class HorizontalGraph extends View {
 
         canvas.save();
 
-        createWorkspace(canvas, 10F, 10F);
+//        createWorkspace(canvas, 10F, 10F);
+        createWorkspace(canvas, 10F);
         customGraph.setSettings(
                 canvas, designElements, 1.5F, 1.5F,
                 10F - 2.5F, 10F - 2.5F,
@@ -95,6 +96,9 @@ public class HorizontalGraph extends View {
 
         // Проблема - плющит линии толщины осей при
         // перекосе масштабирования по одной из осей
+
+        // TODO: что делаю: по каждой из осей будет длина не 10F,
+        //  а пропорциональная абсолютной длине
         canvas.translate(0F, canvas.getHeight());
         canvas.scale(scaleX / xAxisLength,
                 -scaleY / yAxisLength);
@@ -107,6 +111,28 @@ public class HorizontalGraph extends View {
         // значение сетки разметки по каждой из осей холста
         // (если xAxisScale = 1, то при рисовании линии куда либо
         //      в x > 1 линия уползет за экран)
+        float width = getWidth();
+        float height = getHeight();
+        // what size chosen as standard
+        float scale_parameter = Math.min(width, height);
+
+        paint.setColor(Color.rgb(
+                colourScheme.BACKGROUND.red, colourScheme.BACKGROUND.green, colourScheme.BACKGROUND.blue
+        ));
+        paint.setStrokeWidth(20);
+        canvas.drawRoundRect(0, 0, width, height, 75, 75, paint);
+
+//        changeAxis(canvas, scale_parameter, xAxisScale, yAxisScale);
+        changeAxis(canvas, width, height, xAxisScale, yAxisScale);
+    }
+
+    protected void createWorkspace(@NonNull Canvas canvas,
+                                   float minimumAxisScale) {
+        // float minimumAxisScale: задает шкалу
+        // для минимальной оси. Другая ось пересчитывается согласно шкале минимальной
+        // (по итогу даже при масштабировании нарисованные фигуры не будут масштабироваться)
+
+        // TODO: что делаю: одинкаовые единичные отрезки для каждой оси даже при масштабировании
         float width = getWidth();
         float height = getHeight();
         // what size chosen as standard
