@@ -18,10 +18,11 @@ import androidx.annotation.Nullable;
 import java.util.Map;
 
 public class HorizontalGraph extends View {
+    // TODO: запрет на чрезмерное сужение или подстраивать формат графика под это
 
     // ---Data---\
     private Map<Integer, Float> graphData =
-            Map.of(1, 5F, 2, 5F, 3, 5F, 4, 5F, 5, 5F, 6, 5F, 7, 5F, 8, 5F, 9, 5F, 10, 5F);
+            Map.of(1, 1F, 2, 2F, 3, 3F, 4, 4F, 5, 5F, 6, 6F, 7, 7F, 8, 8F, 9, 9F, 10, 10F);
     // ---Data---/
 
     // ---Private members---\
