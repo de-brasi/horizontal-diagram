@@ -65,6 +65,8 @@ public class HorizontalGraph extends View {
                 5, graphData.size(), 1F
         );
 
+        // TODO: (WARNING!) сделать разное количество рисок по каждой оси;
+        //  отрисовывать согласно новому количеству рисок.
         // printAxes after diagram data according expected draw order
         customGraph.printDiagramData(graphData);
         customGraph.printAxes();
@@ -74,12 +76,31 @@ public class HorizontalGraph extends View {
 
     protected void changeAxis(@NonNull Canvas canvas, float scale_parameter,
                               float xAxisLength, float yAxisLength) {
+        // Масштабирование вьюхи как квадрат
+
+        // Проблема - при экстремальной диформации освобождается
+        // чрезмерно много места либо сверху,
+        // либо справа (в зависимости от деформации)
         canvas.translate(0F, canvas.getHeight());
         canvas.scale(scale_parameter / xAxisLength,
                 -scale_parameter / yAxisLength);
     }
 
-    protected void createWorkspace(Canvas canvas,
+    protected void changeAxis(@NonNull Canvas canvas,
+                              float scaleX, float scaleY,
+                              float xAxisLength, float yAxisLength) {
+        // Масштабирование идет по каждой стороне отдельно
+        // При использовании этой функции содержимое
+        // вьюхи масштабируется так же как и формы
+
+        // Проблема - плющит линии толщины осей при
+        // перекосе масштабирования по одной из осей
+        canvas.translate(0F, canvas.getHeight());
+        canvas.scale(scaleX / xAxisLength,
+                -scaleY / yAxisLength);
+    }
+
+    protected void createWorkspace(@NonNull Canvas canvas,
                                    float xAxisScale,
                                    float yAxisScale) {
         // float xAxisScale, float yAxisScale: задает макисмальное
@@ -97,6 +118,7 @@ public class HorizontalGraph extends View {
         paint.setStrokeWidth(20);
         canvas.drawRoundRect(0, 0, width, height, 75, 75, paint);
 
-        changeAxis(canvas, scale_parameter, xAxisScale, yAxisScale);
+//        changeAxis(canvas, scale_parameter, xAxisScale, yAxisScale);
+        changeAxis(canvas, width, height, xAxisScale, yAxisScale);
     }
 }
