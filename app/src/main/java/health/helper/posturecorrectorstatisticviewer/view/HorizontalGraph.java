@@ -26,17 +26,16 @@ public class HorizontalGraph extends View {
     // ---Data---/
 
     // ---Private members---\
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final GraphDesignElements designElements = new GraphDesignElements(
             0.1F, 0.1F,
             0.1F, 0.5F);
-    private ColourScheme colourScheme = new ColourScheme();
-    private CustomGraph customGraph = new CustomGraph(paint, colourScheme);
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final ColourScheme colourScheme = new ColourScheme();
+    private final CustomGraph customGraph = new CustomGraph(paint, colourScheme);
     // ---Private members---/
 
     public HorizontalGraph(Context context) {
         super(context);
-
     }
 
     public HorizontalGraph(Context context, @Nullable AttributeSet attrs) {
@@ -49,17 +48,22 @@ public class HorizontalGraph extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        // TODO: сделать пересчет толщин, когда полей слишком много ( >10 )
+        // TODO: Мб где то хранить полученные значения шкал чтобы потом использовать???
         super.onDraw(canvas);
         paint.setAntiAlias(true);
-
-        // TODO: сделать пересчет толщин, когда полей слишком много ( >10 )
-        // Иначе все начинает наслаиваться
-        assert (graphData.size() <= 10);
+        assert (graphData.size() <= 10);    // Иначе все начинает наслаиваться
 
         canvas.save();
 
 //        createWorkspace(canvas, 10F, 10F);
-        createWorkspace(canvas, 10F);
+        createWorkspace(canvas, customGraph);
+        // Not work(
+//        paint.setColor(Color.RED);
+//        paint.setStrokeWidth(0.2F);
+//        canvas.drawLine(0, 0, 10F, 10F, paint);
+
+
         customGraph.setSettings(
                 canvas, designElements, 1.5F, 1.5F,
                 10F - 2.5F, 10F - 2.5F,
@@ -68,7 +72,7 @@ public class HorizontalGraph extends View {
 
         // TODO: (WARNING!) сделать разное количество рисок по каждой оси;
         //  отрисовывать согласно новому количеству рисок.
-        // printAxes after diagram data according expected draw order
+//         printAxes after diagram data according expected draw order
         customGraph.printDiagramData(graphData);
         customGraph.printAxes();
 
@@ -90,61 +94,35 @@ public class HorizontalGraph extends View {
     protected void changeAxis(@NonNull Canvas canvas,
                               float scaleX, float scaleY,
                               float xAxisLength, float yAxisLength) {
-        // Масштабирование идет по каждой стороне отдельно
-        // При использовании этой функции содержимое
-        // вьюхи масштабируется так же как и формы
-
-        // Проблема - плющит линии толщины осей при
-        // перекосе масштабирования по одной из осей
-
-        // TODO: что делаю: по каждой из осей будет длина не 10F,
-        //  а пропорциональная абсолютной длине
         canvas.translate(0F, canvas.getHeight());
-        canvas.scale(scaleX / xAxisLength,
-                -scaleY / yAxisLength);
+        canvas.scale(scaleX / xAxisLength, -scaleY / yAxisLength);
     }
 
-    protected void createWorkspace(@NonNull Canvas canvas,
-                                   float xAxisScale,
-                                   float yAxisScale) {
-        // float xAxisScale, float yAxisScale: задает макисмальное
-        // значение сетки разметки по каждой из осей холста
-        // (если xAxisScale = 1, то при рисовании линии куда либо
-        //      в x > 1 линия уползет за экран)
-        float width = getWidth();
-        float height = getHeight();
-        // what size chosen as standard
-        float scale_parameter = Math.min(width, height);
+    protected void createWorkspace(@NonNull Canvas canvas, CustomGraph customGraph) {
+        final float width = getWidth();
+        final float height = getHeight();
 
-        paint.setColor(Color.rgb(
-                colourScheme.BACKGROUND.red, colourScheme.BACKGROUND.green, colourScheme.BACKGROUND.blue
-        ));
+        // Make background
         paint.setStrokeWidth(20);
+        paint.setColor(Color.rgb(
+                colourScheme.BACKGROUND.red,
+                colourScheme.BACKGROUND.green,
+                colourScheme.BACKGROUND.blue));
         canvas.drawRoundRect(0, 0, width, height, 75, 75, paint);
 
-//        changeAxis(canvas, scale_parameter, xAxisScale, yAxisScale);
-        changeAxis(canvas, width, height, xAxisScale, yAxisScale);
-    }
+        final float STANDARD_SCALE_VALUE = 10F; // константа - максимальное отрисовываемое расстояние для min стороны
 
-    protected void createWorkspace(@NonNull Canvas canvas,
-                                   float minimumAxisScale) {
-        // float minimumAxisScale: задает шкалу
-        // для минимальной оси. Другая ось пересчитывается согласно шкале минимальной
-        // (по итогу даже при масштабировании нарисованные фигуры не будут масштабироваться)
+        float scaleX, scaleY;
 
-        // TODO: что делаю: одинкаовые единичные отрезки для каждой оси даже при масштабировании
-        float width = getWidth();
-        float height = getHeight();
-        // what size chosen as standard
-        float scale_parameter = Math.min(width, height);
+        if (height > width) {   // Высота больше ширины - вводим шкалу в STANDARD_SCALE_VALUE для оси x
+            scaleX = STANDARD_SCALE_VALUE;
+            scaleY = (height / width) * STANDARD_SCALE_VALUE;
+        } else {    // Ширина больше или равна высоте - вводим шкалу в STANDARD_SCALE_VALUE для оси y
+            scaleY = STANDARD_SCALE_VALUE;
+            scaleX = (width / height) * STANDARD_SCALE_VALUE;
+        }
 
-        paint.setColor(Color.rgb(
-                colourScheme.BACKGROUND.red, colourScheme.BACKGROUND.green, colourScheme.BACKGROUND.blue
-        ));
-        paint.setStrokeWidth(20);
-        canvas.drawRoundRect(0, 0, width, height, 75, 75, paint);
-
-//        changeAxis(canvas, scale_parameter, xAxisScale, yAxisScale);
-        changeAxis(canvas, width, height, xAxisScale, yAxisScale);
+        customGraph.setWorkspaceSize(scaleX, scaleY);
+        changeAxis(canvas, width, height, scaleX, scaleY);
     }
 }

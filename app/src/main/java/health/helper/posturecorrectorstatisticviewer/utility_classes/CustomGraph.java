@@ -44,7 +44,16 @@ public class CustomGraph {
         printedRowThickness = printedRowThickness_;
     }
 
+    public void setWorkspaceSize(float xSize, float ySize) {
+        xMeasurement = xSize;
+        yMeasurements = ySize;
+    }
+
     public void printAxes() {
+        // TODO: что нужно сделать теперь:
+        //  расчечивать шкалу для всего пространства
+        //  - отрисовывать график "на полную"
+
         paint.setColor(Color.rgb(
                 colourScheme.ROW_COLOR.red,
                 colourScheme.ROW_COLOR.green,
@@ -52,18 +61,14 @@ public class CustomGraph {
         paint.setStrokeWidth(visualSettings.axisThickness);
         paint.setStyle(Paint.Style.FILL);
 
-        printWithScaleAxisX(
-                workCanvas,
+        printWithScaleAxisX(workCanvas, visualSettings,
                 xOffsetFromOrigin, xOffsetFromOrigin + xAxisLength,
                 yOffsetFromOrigin, yOffsetFromOrigin,
-                xScaleCount, visualSettings
-        );
-        printWithScaleAxisY(
-                workCanvas,
+                xScaleCount);
+        printWithScaleAxisY(workCanvas, visualSettings,
                 xOffsetFromOrigin, xOffsetFromOrigin,
                 yOffsetFromOrigin, yOffsetFromOrigin + yAxisLength,
-                yScaleCount, visualSettings
-        );
+                yScaleCount);
     }
 
     public void changeCoordinateSystemToGraph() {
@@ -72,6 +77,10 @@ public class CustomGraph {
     }
 
     public void printDiagramData(Map<Integer, Float> graphData) {
+        // TODO: что нужно сделать теперь:
+        //  расчечивать шкалу для всего пространства
+        //  - отрисовывать график "на полную"
+
         // Исходя из личных предпочтений о "гармонии и красоте"
         // выбирается значение workspace_share (0 < workspace_share <= (axsiMax - axisMin)) -
         // это значение обозначает долю области от общего пространства,
@@ -125,10 +134,10 @@ public class CustomGraph {
     }
 
     private void printWithScaleAxisX(@NonNull Canvas canvas,
+                                     @NonNull GraphDesignElements visualSettings,
                                      float xStart, float xFinish,
                                      float yStart, float yFinish,
-                                     int scaleCount,
-                                     @NonNull GraphDesignElements visualSettings) {
+                                     int scaleCount) {
         canvas.drawLine(xStart, yStart, xFinish, yStart, paint);
 
         // Отметки вдоль оси X
@@ -146,10 +155,10 @@ public class CustomGraph {
     }
 
     private void printWithScaleAxisY(@NonNull Canvas canvas,
+                                     @NonNull GraphDesignElements visualSettings,
                                      float xStart, float xFinish,
                                      float yStart, float yFinish,
-                                     int scaleCount,
-                                     @NonNull GraphDesignElements visualSettings) {
+                                     int scaleCount) {
         // (0, 0) dot
         canvas.drawCircle(xStart, yStart, visualSettings.yAxisDotRadius, paint);
 
@@ -178,10 +187,14 @@ public class CustomGraph {
     private GraphDesignElements visualSettings;
     private ColourScheme colourScheme;
 
-    public float xOffsetFromOrigin;
-    public float yOffsetFromOrigin;
     public float xAxisLength;
     public float yAxisLength;
+
+    public float xMeasurement;
+    public float yMeasurements;
+
+    public float xOffsetFromOrigin;
+    public float yOffsetFromOrigin;
     public int xScaleCount;
     public int yScaleCount;
     public float printedRowThickness;
