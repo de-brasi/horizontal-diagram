@@ -7,12 +7,13 @@
     tools:context=".MainActivity">
 
     <health.helper.posturecorrectorstatisticviewer.view.HorizontalGraph
-        android:layout_width="219dp"
-        android:layout_height="137dp"
+        android:layout_width="265dp"
+        android:layout_height="128dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.166"
+        app:layout_constraintHorizontal_bias="0.362"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

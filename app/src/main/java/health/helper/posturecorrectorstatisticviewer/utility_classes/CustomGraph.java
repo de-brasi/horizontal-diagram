@@ -19,10 +19,9 @@ public class CustomGraph {
     public void setSettings(@NonNull Canvas canvas,
                             GraphDesignElements visualSettings_,
                             float xOffsetFromOrigin_, float yOffsetFromOrigin_,
-                            float xAxisLength_, float yAxisLength_,
+                            float xRightOffset_, float yUpOffset_,
                             int xScaleCount_, int yScaleCount_,
                             float printedRowThickness_) {
-        // Set canvas that will used under class purpose
         workCanvas = canvas;
 
         // Class-container for printing info such as colours, line options etc
@@ -33,14 +32,12 @@ public class CustomGraph {
         xOffsetFromOrigin = xOffsetFromOrigin_;
         yOffsetFromOrigin = yOffsetFromOrigin_;
 
-        // Lengths of visible graph's axes
-        xAxisLength = xAxisLength_;
-        yAxisLength = yAxisLength_;
+        xRightOffset = xRightOffset_;
+        yUpOffset = yUpOffset_;
 
         xScaleCount = xScaleCount_;
         yScaleCount = yScaleCount_;
 
-        // The thickness of the figures denoting the value of the graph
         printedRowThickness = printedRowThickness_;
     }
 
@@ -61,13 +58,16 @@ public class CustomGraph {
         paint.setStrokeWidth(visualSettings.axisThickness);
         paint.setStyle(Paint.Style.FILL);
 
+        // TODO: что делаю - вместо задания длины осей,
+        //  я буду задовать offset от края,
+        //  таким образом масштабирование не должно делаьб хуйню
         printWithScaleAxisX(workCanvas, visualSettings,
-                xOffsetFromOrigin, xOffsetFromOrigin + xAxisLength,
+                xOffsetFromOrigin, xMeasurement - xRightOffset,
                 yOffsetFromOrigin, yOffsetFromOrigin,
                 xScaleCount);
         printWithScaleAxisY(workCanvas, visualSettings,
                 xOffsetFromOrigin, xOffsetFromOrigin,
-                yOffsetFromOrigin, yOffsetFromOrigin + yAxisLength,
+                yOffsetFromOrigin, yMeasurements - yUpOffset,
                 yScaleCount);
     }
 
@@ -94,9 +94,9 @@ public class CustomGraph {
         paint.setColor(Color.RED);
 
         float workspace_share = visualSettings.workspaceValue;
-        float workspace_len = xAxisLength * workspace_share;
+        float workspace_len = (xMeasurement - xOffsetFromOrigin - xRightOffset) * workspace_share;
 
-        float distanceBetweenScales_y = yAxisLength / (yScaleCount + 1);
+        float distanceBetweenScales_y = (yMeasurements - yOffsetFromOrigin - yUpOffset) / (yScaleCount + 1);
 
         int curScale;
         float curValue;
@@ -187,8 +187,8 @@ public class CustomGraph {
     private GraphDesignElements visualSettings;
     private ColourScheme colourScheme;
 
-    public float xAxisLength;
-    public float yAxisLength;
+    public float xRightOffset;
+    public float yUpOffset;
 
     public float xMeasurement;
     public float yMeasurements;

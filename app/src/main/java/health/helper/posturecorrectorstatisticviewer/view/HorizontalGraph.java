@@ -66,13 +66,14 @@ public class HorizontalGraph extends View {
 
         customGraph.setSettings(
                 canvas, designElements, 1.5F, 1.5F,
-                10F - 2.5F, 10F - 2.5F,
+                2F, 2F,
                 5, graphData.size(), 1F
         );
 
         // TODO: (WARNING!) сделать разное количество рисок по каждой оси;
         //  отрисовывать согласно новому количеству рисок.
 //         printAxes after diagram data according expected draw order
+
         customGraph.printDiagramData(graphData);
         customGraph.printAxes();
 
