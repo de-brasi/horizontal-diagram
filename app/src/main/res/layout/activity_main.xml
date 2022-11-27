@@ -14,6 +14,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
+        app:layout_constraintVertical_bias="0.498"
+
+        app:graphBackgroundColor="#4B0082"
+        app:barColors="#0000FF #00BFFF #800000 #00FFFF"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

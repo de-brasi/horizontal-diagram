@@ -1,7 +1,10 @@
 package health.helper.posturecorrectorstatisticviewer.utility_classes;
 
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class HelpfulFunctions {
@@ -17,5 +20,18 @@ public class HelpfulFunctions {
         }
 
         return maxValue;
+    }
+
+    @NonNull
+    public static ArrayList<CustomColorRGB>  parseStringToColors(@NonNull String colors) {
+        String[] parsedByStrings = colors.split("\\|", -1);
+
+        ArrayList<CustomColorRGB> parsedColors = new ArrayList<>();
+        Color curColor;
+        for (String color: parsedByStrings) {
+            curColor = Color.valueOf(Integer.parseInt(color));
+            parsedColors.add(new CustomColorRGB(curColor));
+        }
+        return parsedColors;
     }
 }

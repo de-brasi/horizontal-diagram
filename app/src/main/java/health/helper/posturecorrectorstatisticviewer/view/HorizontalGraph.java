@@ -1,11 +1,15 @@
 package health.helper.posturecorrectorstatisticviewer.view;
 
+import health.helper.posturecorrectorstatisticviewer.R;
+import health.helper.posturecorrectorstatisticviewer.utility_classes.CustomColorRGB;
 import health.helper.posturecorrectorstatisticviewer.utility_classes.GraphDesignElements;
 import health.helper.posturecorrectorstatisticviewer.utility_classes.ColourScheme;
 import health.helper.posturecorrectorstatisticviewer.utility_classes.CustomGraph;
+import health.helper.posturecorrectorstatisticviewer.utility_classes.HelpfulFunctions;
 
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,30 +19,67 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class HorizontalGraph extends View {
-    // Data
     private Map<Integer, Float> graphData =
-            Map.of(1, 1F, 2, 2F, 3, 3F, 4, 4F, 5, 5F, 6, 6F, 7, 7F, 8, 8F, 9, 9F, 10, 10F);
+            Map.of(1, 1F, 2, 2F, 3, 3F,
+                    4, 4F, 5, 5F, 6, 6F,
+                    7, 7F, 8, 8F, 9, 9F,
+                    10, 10F);
 
-    private final GraphDesignElements designElements = new GraphDesignElements(
-            0.1F, 0.1F,
-            0.1F, 0.5F);
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final ColourScheme colourScheme = new ColourScheme();
-    private final CustomGraph customGraph = new CustomGraph(paint, colourScheme);
+    private GraphDesignElements designElements;
+    private Paint paint;
+    private ColourScheme colorScheme;
+    private CustomGraph customGraph;
 
     public HorizontalGraph(Context context) {
         super(context);
+        init(context, null);
     }
 
     public HorizontalGraph(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs);
     }
 
     public HorizontalGraph(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        designElements = new GraphDesignElements(
+                0.1F, 0.1F,
+                0.1F, 0.5F);
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        colorScheme = new ColourScheme();
+        customGraph = new CustomGraph(paint, colorScheme);
+
+        if (attrs != null) {
+            TypedArray receivedAttrs =
+                    context.obtainStyledAttributes(attrs, R.styleable.HorizontalGraph);
+
+            Color bgColor = Color.valueOf(
+                    receivedAttrs.getColor(
+                            R.styleable.HorizontalGraph_graphBackgroundColor,
+                    0xB590BA
+                    )
+            );
+            String barColors = receivedAttrs.getString(
+                    R.styleable.HorizontalGraph_graphBackgroundColor
+            );
+
+            // Parse string with colors and make CustomColorRGB collection
+            ArrayList<CustomColorRGB> colorSet = HelpfulFunctions.parseStringToColors(barColors);
+
+            assert graphData.size() <= colorSet.size();     // All bars need appropriate color
+            colorScheme.BACKGROUND = new CustomColorRGB(bgColor);
+            colorScheme.colorsSet = colorSet;
+
+            receivedAttrs.recycle();
+        }
     }
 
     @Override
@@ -78,9 +119,9 @@ public class HorizontalGraph extends View {
         // Make background
         paint.setStrokeWidth(20);
         paint.setColor(Color.rgb(
-                colourScheme.BACKGROUND.red,
-                colourScheme.BACKGROUND.green,
-                colourScheme.BACKGROUND.blue));
+                colorScheme.BACKGROUND.red,
+                colorScheme.BACKGROUND.green,
+                colorScheme.BACKGROUND.blue));
         canvas.drawRoundRect(0, 0, width, height, 75, 75, paint);
 
         final float STANDARD_SCALE_VALUE = 10F; // константа - максимальное отрисовываемое расстояние для min стороны

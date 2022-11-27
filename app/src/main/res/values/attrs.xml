@@ -2,6 +2,6 @@
 <resources>
     <declare-styleable name="HorizontalGraph">
         <attr name="graphBackgroundColor" format="color"/>
-        <attr name="barColors" format="string"/> <!-- Придется парсить строку по правилам -->
+        <attr name="barColors" format="string"/>
     </declare-styleable>
 </resources>

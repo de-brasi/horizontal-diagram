@@ -39,8 +39,8 @@ public class ColourScheme {
     //  максимуму ошибок боллее агресисвные цвета, минимуму - более "поощряющие"
     private final int brightness = 0;
 
-    final public ArrayList<CustomColorRGB> colorsSet;
-    final public CustomColorRGB BACKGROUND =
+    public ArrayList<CustomColorRGB> colorsSet;
+    public CustomColorRGB BACKGROUND =
             new CustomColorRGB(181, 144, 186);
     final public CustomColorRGB ROW_COLOR = new CustomColorRGB(53, 53, 53);
 }
