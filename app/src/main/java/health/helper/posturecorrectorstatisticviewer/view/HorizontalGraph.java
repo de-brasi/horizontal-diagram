@@ -18,19 +18,16 @@ import androidx.annotation.Nullable;
 import java.util.Map;
 
 public class HorizontalGraph extends View {
-    // ---Data---\
+    // Data
     private Map<Integer, Float> graphData =
             Map.of(1, 1F, 2, 2F, 3, 3F, 4, 4F, 5, 5F, 6, 6F, 7, 7F, 8, 8F, 9, 9F, 10, 10F);
-    // ---Data---/
 
-    // ---Private members---\
     private final GraphDesignElements designElements = new GraphDesignElements(
             0.1F, 0.1F,
             0.1F, 0.5F);
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final ColourScheme colourScheme = new ColourScheme();
     private final CustomGraph customGraph = new CustomGraph(paint, colourScheme);
-    // ---Private members---/
 
     public HorizontalGraph(Context context) {
         super(context);
