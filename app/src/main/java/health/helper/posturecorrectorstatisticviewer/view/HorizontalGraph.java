@@ -18,8 +18,6 @@ import androidx.annotation.Nullable;
 import java.util.Map;
 
 public class HorizontalGraph extends View {
-    // TODO: запрет на чрезмерное сужение или подстраивать формат графика под это
-
     // ---Data---\
     private Map<Integer, Float> graphData =
             Map.of(1, 1F, 2, 2F, 3, 3F, 4, 4F, 5, 5F, 6, 6F, 7, 7F, 8, 8F, 9, 9F, 10, 10F);
@@ -49,20 +47,13 @@ public class HorizontalGraph extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         // TODO: сделать пересчет толщин, когда полей слишком много ( >10 )
-        // TODO: Мб где то хранить полученные значения шкал чтобы потом использовать???
         super.onDraw(canvas);
         paint.setAntiAlias(true);
         assert (graphData.size() <= 10);    // Иначе все начинает наслаиваться
 
         canvas.save();
 
-//        createWorkspace(canvas, 10F, 10F);
         createWorkspace(canvas, customGraph);
-        // Not work(
-//        paint.setColor(Color.RED);
-//        paint.setStrokeWidth(0.2F);
-//        canvas.drawLine(0, 0, 10F, 10F, paint);
-
 
         customGraph.setSettings(
                 canvas, designElements, 1.5F, 1.5F,
@@ -70,26 +61,10 @@ public class HorizontalGraph extends View {
                 5, graphData.size(), 1F
         );
 
-        // TODO: (WARNING!) сделать разное количество рисок по каждой оси;
-        //  отрисовывать согласно новому количеству рисок.
-//         printAxes after diagram data according expected draw order
-
         customGraph.printDiagramData(graphData);
         customGraph.printAxes();
 
         canvas.restore();
-    }
-
-    protected void changeAxis(@NonNull Canvas canvas, float scale_parameter,
-                              float xAxisLength, float yAxisLength) {
-        // Масштабирование вьюхи как квадрат
-
-        // Проблема - при экстремальной диформации освобождается
-        // чрезмерно много места либо сверху,
-        // либо справа (в зависимости от деформации)
-        canvas.translate(0F, canvas.getHeight());
-        canvas.scale(scale_parameter / xAxisLength,
-                -scale_parameter / yAxisLength);
     }
 
     protected void changeAxis(@NonNull Canvas canvas,

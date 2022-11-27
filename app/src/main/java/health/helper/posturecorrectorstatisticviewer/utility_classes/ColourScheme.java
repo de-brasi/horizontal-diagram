@@ -1,7 +1,5 @@
 package health.helper.posturecorrectorstatisticviewer.utility_classes;
 
-import health.helper.posturecorrectorstatisticviewer.utility_classes.CustomColorRGB;
-
 import java.util.ArrayList;
 
 public class ColourScheme {

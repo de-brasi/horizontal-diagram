@@ -1,7 +1,5 @@
 package health.helper.posturecorrectorstatisticviewer.utility_classes;
 
-import health.helper.posturecorrectorstatisticviewer.utility_classes.HelpfulFunctions;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -47,10 +45,6 @@ public class CustomGraph {
     }
 
     public void printAxes() {
-        // TODO: что нужно сделать теперь:
-        //  расчечивать шкалу для всего пространства
-        //  - отрисовывать график "на полную"
-
         paint.setColor(Color.rgb(
                 colourScheme.ROW_COLOR.red,
                 colourScheme.ROW_COLOR.green,
@@ -58,9 +52,6 @@ public class CustomGraph {
         paint.setStrokeWidth(visualSettings.axisThickness);
         paint.setStyle(Paint.Style.FILL);
 
-        // TODO: что делаю - вместо задания длины осей,
-        //  я буду задовать offset от края,
-        //  таким образом масштабирование не должно делаьб хуйню
         printWithScaleAxisX(workCanvas, visualSettings,
                 xOffsetFromOrigin, xMeasurement - xRightOffset,
                 yOffsetFromOrigin, yOffsetFromOrigin,
