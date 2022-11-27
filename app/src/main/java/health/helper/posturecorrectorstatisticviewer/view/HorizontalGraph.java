@@ -68,7 +68,7 @@ public class HorizontalGraph extends View {
                     )
             );
             String barColors = receivedAttrs.getString(
-                    R.styleable.HorizontalGraph_graphBackgroundColor
+                    R.styleable.HorizontalGraph_barColors
             );
 
             // Parse string with colors and make CustomColorRGB collection
