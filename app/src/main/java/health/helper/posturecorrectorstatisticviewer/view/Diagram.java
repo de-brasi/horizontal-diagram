@@ -73,6 +73,9 @@ public class Diagram extends View {
                             0x353535
                     )
             );
+            boolean isTransposed = receivedAttrs.getBoolean(
+                    R.styleable.Diagram_isTransposed, false
+            );
             String barColors = receivedAttrs.getString(
                     R.styleable.Diagram_barColors
             );
@@ -83,6 +86,7 @@ public class Diagram extends View {
             colorScheme.BACKGROUND = new CustomColorRGB(bgColor);
             colorScheme.AXIS_COLOR = new CustomColorRGB(axisColor);
             colorScheme.colorsSet = colorSet;
+            customGraph.isTransposed = isTransposed;
 
             receivedAttrs.recycle();
         }
