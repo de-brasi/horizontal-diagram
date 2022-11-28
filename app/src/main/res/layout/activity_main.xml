@@ -17,6 +17,7 @@
         app:layout_constraintVertical_bias="0.498"
 
         app:graphBackgroundColor="#4B0082"
-        app:barColors="#0000FF #00BFFF #800000 #00FFFF"/>
+        app:graphAxisColor="@color/black"
+        app:barColors="0000FF 00BFFF 800000 00FFFF"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

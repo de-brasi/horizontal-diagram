@@ -24,9 +24,9 @@ import java.util.Map;
 
 public class HorizontalGraph extends View {
     private Map<Integer, Float> graphData =
-            Map.of(1, 1F, 2, 2F, 3, 3F,
+            Map.of(1, 2F, 2, 2F, 3, 3F,
                     4, 4F, 5, 5F, 6, 6F,
-                    7, 7F, 8, 8F, 9, 9F,
+                    7, 3F, 8, 8F, 9, 9F,
                     10, 10F);
 
     private GraphDesignElements designElements;
@@ -57,7 +57,9 @@ public class HorizontalGraph extends View {
         colorScheme = new ColourScheme();
         customGraph = new CustomGraph(paint, colorScheme);
 
+        // TODO: REFACTOR THIS!
         if (attrs != null) {
+//        if (false) {
             TypedArray receivedAttrs =
                     context.obtainStyledAttributes(attrs, R.styleable.HorizontalGraph);
 
@@ -67,6 +69,12 @@ public class HorizontalGraph extends View {
                     0xB590BA
                     )
             );
+            Color axisColor = Color.valueOf(
+                    receivedAttrs.getColor(
+                            R.styleable.HorizontalGraph_graphAxisColor,
+                            0x353535
+                    )
+            );
             String barColors = receivedAttrs.getString(
                     R.styleable.HorizontalGraph_barColors
             );
@@ -74,8 +82,8 @@ public class HorizontalGraph extends View {
             // Parse string with colors and make CustomColorRGB collection
             ArrayList<CustomColorRGB> colorSet = HelpfulFunctions.parseStringToColors(barColors);
 
-            assert graphData.size() <= colorSet.size();     // All bars need appropriate color
             colorScheme.BACKGROUND = new CustomColorRGB(bgColor);
+            colorScheme.AXIS_COLOR = new CustomColorRGB(axisColor);
             colorScheme.colorsSet = colorSet;
 
             receivedAttrs.recycle();

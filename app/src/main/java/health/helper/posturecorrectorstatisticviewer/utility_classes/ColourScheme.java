@@ -42,5 +42,6 @@ public class ColourScheme {
     public ArrayList<CustomColorRGB> colorsSet;
     public CustomColorRGB BACKGROUND =
             new CustomColorRGB(181, 144, 186);
-    final public CustomColorRGB ROW_COLOR = new CustomColorRGB(53, 53, 53);
+    public CustomColorRGB AXIS_COLOR =
+            new CustomColorRGB(50, 50, 50);
 }

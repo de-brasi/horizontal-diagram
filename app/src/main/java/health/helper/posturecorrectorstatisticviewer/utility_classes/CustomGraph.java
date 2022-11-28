@@ -46,9 +46,12 @@ public class CustomGraph {
 
     public void printAxes() {
         paint.setColor(Color.rgb(
-                colourScheme.ROW_COLOR.red,
-                colourScheme.ROW_COLOR.green,
-                colourScheme.ROW_COLOR.blue));
+                colourScheme.AXIS_COLOR.red,
+                colourScheme.AXIS_COLOR.green,
+                colourScheme.AXIS_COLOR.blue));
+//        Color example = Color.valueOf(50, 50, 50);
+//        paint.setColor(Color.rgb(example.red(), example.green(), example.blue()));
+
         paint.setStrokeWidth(visualSettings.axisThickness);
         paint.setStyle(Paint.Style.FILL);
 
@@ -100,6 +103,7 @@ public class CustomGraph {
         CustomColorRGB curColor;
         for (Map.Entry<Integer, Float> entry: graphData.entrySet()) {
             // Choice color
+            colorIdx = colorIdx % colourScheme.colorsSet.size();
             curColor = colourScheme.colorsSet.get(colorIdx);
             paint.setColor(Color.rgb(curColor.red, curColor.green, curColor.blue));
             ++colorIdx;

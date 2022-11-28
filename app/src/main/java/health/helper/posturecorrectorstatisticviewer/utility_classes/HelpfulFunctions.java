@@ -24,12 +24,13 @@ public class HelpfulFunctions {
 
     @NonNull
     public static ArrayList<CustomColorRGB>  parseStringToColors(@NonNull String colors) {
-        String[] parsedByStrings = colors.split("\\|", -1);
+        String[] parsedByStrings = colors.split(" ");
 
         ArrayList<CustomColorRGB> parsedColors = new ArrayList<>();
-        Color curColor;
+
         for (String color: parsedByStrings) {
-            curColor = Color.valueOf(Integer.parseInt(color));
+            String clean = color.substring(1);
+            Color curColor = Color.valueOf(Integer.parseInt(clean, 16));
             parsedColors.add(new CustomColorRGB(curColor));
         }
         return parsedColors;
