@@ -4,6 +4,6 @@
         <attr name="graphBackgroundColor" format="color"/>
         <attr name="graphAxisColor" format="color"/>
         <attr name="barColors" format="string"/>
-
+        <attr name="isTransposed" format="boolean"/>
     </declare-styleable>
 </resources>
