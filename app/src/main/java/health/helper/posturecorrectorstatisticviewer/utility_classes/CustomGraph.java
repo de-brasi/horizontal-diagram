@@ -172,7 +172,7 @@ public class CustomGraph {
     private GraphDesignElements visualSettings;
     private ColourScheme colourScheme;
 
-    public boolean isTransposed;
+    public boolean isTransposed = false;
 
     public float xRightOffset;
     public float yUpOffset;
