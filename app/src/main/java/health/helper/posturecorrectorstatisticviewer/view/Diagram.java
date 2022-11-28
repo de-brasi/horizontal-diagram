@@ -22,7 +22,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class HorizontalGraph extends View {
+public class Diagram extends View {
     private Map<Integer, Float> graphData =
             Map.of(1, 2F, 2, 2F, 3, 3F,
                     4, 4F, 5, 5F, 6, 6F,
@@ -34,17 +34,17 @@ public class HorizontalGraph extends View {
     private ColourScheme colorScheme;
     private CustomGraph customGraph;
 
-    public HorizontalGraph(Context context) {
+    public Diagram(Context context) {
         super(context);
         init(context, null);
     }
 
-    public HorizontalGraph(Context context, @Nullable AttributeSet attrs) {
+    public Diagram(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public HorizontalGraph(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public Diagram(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }

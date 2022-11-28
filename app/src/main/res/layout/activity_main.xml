@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <health.helper.posturecorrectorstatisticviewer.view.HorizontalGraph
+    <health.helper.posturecorrectorstatisticviewer.view.Diagram
         android:layout_width="175dp"
         android:layout_height="259dp"
         app:layout_constraintBottom_toBottomOf="parent"
