@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="HorizontalGraph">
+    <declare-styleable name="Diagram">
         <attr name="graphBackgroundColor" format="color"/>
         <attr name="graphAxisColor" format="color"/>
         <attr name="barColors" format="string"/>

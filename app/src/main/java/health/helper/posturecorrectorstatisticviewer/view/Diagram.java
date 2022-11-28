@@ -59,22 +59,22 @@ public class Diagram extends View {
 
         if (attrs != null) {
             TypedArray receivedAttrs =
-                    context.obtainStyledAttributes(attrs, R.styleable.HorizontalGraph);
+                    context.obtainStyledAttributes(attrs, R.styleable.Diagram);
 
             Color bgColor = Color.valueOf(
                     receivedAttrs.getColor(
-                            R.styleable.HorizontalGraph_graphBackgroundColor,
+                            R.styleable.Diagram_graphBackgroundColor,
                     0xB590BA
                     )
             );
             Color axisColor = Color.valueOf(
                     receivedAttrs.getColor(
-                            R.styleable.HorizontalGraph_graphAxisColor,
+                            R.styleable.Diagram_graphAxisColor,
                             0x353535
                     )
             );
             String barColors = receivedAttrs.getString(
-                    R.styleable.HorizontalGraph_barColors
+                    R.styleable.Diagram_barColors
             );
 
             // Parse string with colors and make CustomColorRGB collection
