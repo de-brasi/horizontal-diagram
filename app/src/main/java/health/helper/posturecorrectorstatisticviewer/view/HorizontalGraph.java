@@ -57,9 +57,7 @@ public class HorizontalGraph extends View {
         colorScheme = new ColourScheme();
         customGraph = new CustomGraph(paint, colorScheme);
 
-        // TODO: REFACTOR THIS!
         if (attrs != null) {
-//        if (false) {
             TypedArray receivedAttrs =
                     context.obtainStyledAttributes(attrs, R.styleable.HorizontalGraph);
 
@@ -92,7 +90,6 @@ public class HorizontalGraph extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // TODO: сделать пересчет толщин, когда полей слишком много ( >10 )
         super.onDraw(canvas);
         paint.setAntiAlias(true);
         assert (graphData.size() <= 10);    // Иначе все начинает наслаиваться
@@ -130,7 +127,7 @@ public class HorizontalGraph extends View {
                 colorScheme.BACKGROUND.red,
                 colorScheme.BACKGROUND.green,
                 colorScheme.BACKGROUND.blue));
-        canvas.drawRoundRect(0, 0, width, height, 75, 75, paint);
+        canvas.drawRoundRect(0, 0, width, height, 50, 50, paint);
 
         final float STANDARD_SCALE_VALUE = 10F; // константа - максимальное отрисовываемое расстояние для min стороны
 

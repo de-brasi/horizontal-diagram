@@ -49,8 +49,6 @@ public class CustomGraph {
                 colourScheme.AXIS_COLOR.red,
                 colourScheme.AXIS_COLOR.green,
                 colourScheme.AXIS_COLOR.blue));
-//        Color example = Color.valueOf(50, 50, 50);
-//        paint.setColor(Color.rgb(example.red(), example.green(), example.blue()));
 
         paint.setStrokeWidth(visualSettings.axisThickness);
         paint.setStyle(Paint.Style.FILL);
@@ -71,9 +69,6 @@ public class CustomGraph {
     }
 
     public void printDiagramData(Map<Integer, Float> graphData) {
-        // TODO: что нужно сделать теперь:
-        //  расчечивать шкалу для всего пространства
-        //  - отрисовывать график "на полную"
 
         // Исходя из личных предпочтений о "гармонии и красоте"
         // выбирается значение workspace_share (0 < workspace_share <= (axsiMax - axisMin)) -
@@ -144,9 +139,6 @@ public class CustomGraph {
                     xStart + i * scaleStep, yStart,
                     visualSettings.xAxisDotRadius, paint);
         }
-
-        // Окончание - стрелка для оси
-        // TODO: Для оси X нужна стрелка
     }
 
     private void printWithScaleAxisY(@NonNull Canvas canvas,
@@ -170,8 +162,6 @@ public class CustomGraph {
                     visualSettings.yAxisDotRadius, paint);
         }
 
-        // Окончание - стрелка для оси
-        // Для оси Y нужна просто черточка/точка
         canvas.drawCircle(
                 xStart, yFinish,
                 visualSettings.yAxisDotRadius * 1.3F, paint);
