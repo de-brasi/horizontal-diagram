@@ -143,35 +143,22 @@ public class Diagram extends View {
 
         float scaleX, scaleY;
 
-        if (customGraph.isTransposed) {
-            // Horizontal graph
-            if (height > width) {   // Высота больше ширины - вводим шкалу в STANDARD_SCALE_VALUE для оси x
-                scaleX = STANDARD_SCALE_VALUE;
-                scaleY = (height / width) * STANDARD_SCALE_VALUE;
-            } else {    // Ширина больше или равна высоте - вводим шкалу в STANDARD_SCALE_VALUE для оси y
-                scaleY = STANDARD_SCALE_VALUE;
-                scaleX = (width / height) * STANDARD_SCALE_VALUE;
-            }
-
-            customGraph.setWorkspaceSize(scaleX, scaleY);
-            changeAxis(canvas, width, height, scaleX, scaleY, true);
-        } else {
+        if (!customGraph.isTransposed) {
             // Normal graph
-
             float tmp = width;
             width = height;
             height = tmp;
-
-            if (height > width) {   // Высота больше ширины - вводим шкалу в STANDARD_SCALE_VALUE для оси x
-                scaleX = STANDARD_SCALE_VALUE;
-                scaleY = (height / width) * STANDARD_SCALE_VALUE;
-            } else {    // Ширина больше или равна высоте - вводим шкалу в STANDARD_SCALE_VALUE для оси y
-                scaleY = STANDARD_SCALE_VALUE;
-                scaleX = (width / height) * STANDARD_SCALE_VALUE;
-            }
-
-            customGraph.setWorkspaceSize(scaleX, scaleY);
-            changeAxis(canvas, width, height, scaleX, scaleY, false);
         }
+
+        if (height > width) {   // Высота больше ширины - вводим шкалу в STANDARD_SCALE_VALUE для оси x
+            scaleX = STANDARD_SCALE_VALUE;
+            scaleY = (height / width) * STANDARD_SCALE_VALUE;
+        } else {    // Ширина больше или равна высоте - вводим шкалу в STANDARD_SCALE_VALUE для оси y
+            scaleY = STANDARD_SCALE_VALUE;
+            scaleX = (width / height) * STANDARD_SCALE_VALUE;
+        }
+
+        customGraph.setWorkspaceSize(scaleX, scaleY);
+        changeAxis(canvas, width, height, scaleX, scaleY, customGraph.isTransposed);
     }
 }
