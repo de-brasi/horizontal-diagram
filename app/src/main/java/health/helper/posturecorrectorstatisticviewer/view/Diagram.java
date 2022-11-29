@@ -116,14 +116,20 @@ public class Diagram extends View {
 
     protected void changeAxis(@NonNull Canvas canvas,
                               float scaleX, float scaleY,
-                              float xAxisLength, float yAxisLength) {
+                              float xAxisLength, float yAxisLength,
+                              boolean isTransposed) {
         canvas.translate(0F, canvas.getHeight());
         canvas.scale(scaleX / xAxisLength, -scaleY / yAxisLength);
+
+        if (!isTransposed) {
+            canvas.rotate(-90);
+            canvas.scale(-1, 1);
+        }
     }
 
-    protected void createWorkspace(@NonNull Canvas canvas, CustomGraph customGraph) {
-        final float width = getWidth();
-        final float height = getHeight();
+    protected void createWorkspace(@NonNull Canvas canvas, @NonNull CustomGraph customGraph) {
+        float width = getWidth();
+        float height = getHeight();
 
         // Make background
         paint.setStrokeWidth(20);
@@ -137,15 +143,35 @@ public class Diagram extends View {
 
         float scaleX, scaleY;
 
-        if (height > width) {   // Высота больше ширины - вводим шкалу в STANDARD_SCALE_VALUE для оси x
-            scaleX = STANDARD_SCALE_VALUE;
-            scaleY = (height / width) * STANDARD_SCALE_VALUE;
-        } else {    // Ширина больше или равна высоте - вводим шкалу в STANDARD_SCALE_VALUE для оси y
-            scaleY = STANDARD_SCALE_VALUE;
-            scaleX = (width / height) * STANDARD_SCALE_VALUE;
-        }
+        if (customGraph.isTransposed) {
+            // Horizontal graph
+            if (height > width) {   // Высота больше ширины - вводим шкалу в STANDARD_SCALE_VALUE для оси x
+                scaleX = STANDARD_SCALE_VALUE;
+                scaleY = (height / width) * STANDARD_SCALE_VALUE;
+            } else {    // Ширина больше или равна высоте - вводим шкалу в STANDARD_SCALE_VALUE для оси y
+                scaleY = STANDARD_SCALE_VALUE;
+                scaleX = (width / height) * STANDARD_SCALE_VALUE;
+            }
 
-        customGraph.setWorkspaceSize(scaleX, scaleY);
-        changeAxis(canvas, width, height, scaleX, scaleY);
+            customGraph.setWorkspaceSize(scaleX, scaleY);
+            changeAxis(canvas, width, height, scaleX, scaleY, true);
+        } else {
+            // Normal graph
+
+            float tmp = width;
+            width = height;
+            height = tmp;
+
+            if (height > width) {   // Высота больше ширины - вводим шкалу в STANDARD_SCALE_VALUE для оси x
+                scaleX = STANDARD_SCALE_VALUE;
+                scaleY = (height / width) * STANDARD_SCALE_VALUE;
+            } else {    // Ширина больше или равна высоте - вводим шкалу в STANDARD_SCALE_VALUE для оси y
+                scaleY = STANDARD_SCALE_VALUE;
+                scaleX = (width / height) * STANDARD_SCALE_VALUE;
+            }
+
+            customGraph.setWorkspaceSize(scaleX, scaleY);
+            changeAxis(canvas, width, height, scaleX, scaleY, false);
+        }
     }
 }
