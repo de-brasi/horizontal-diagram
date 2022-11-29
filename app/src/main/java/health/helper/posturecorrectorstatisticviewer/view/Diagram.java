@@ -51,8 +51,9 @@ public class Diagram extends View {
 
     private void init(Context context, AttributeSet attrs) {
         designElements = new GraphDesignElements(
-                0.1F, 0.1F,
-                0.1F, 0.5F);
+                0.2F,
+                0.2F, 0.2F,
+                0.5F);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         colorScheme = new ColourScheme();
         customGraph = new CustomGraph(paint, colorScheme);

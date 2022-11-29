@@ -139,6 +139,10 @@ public class CustomGraph {
                     xStart + i * scaleStep, yStart,
                     visualSettings.xAxisDotRadius, paint);
         }
+
+        canvas.drawCircle(
+                xFinish, yStart,
+                visualSettings.xAxisDotRadius * 1.3F, paint);
     }
 
     private void printWithScaleAxisY(@NonNull Canvas canvas,
