@@ -19,6 +19,6 @@ public class GraphDesignElements {
 
     final public float dataRowThickness;
 
-    final public float defaultValueRowLength = 0.4F;
+    final public float defaultValueBarLength = 0.4F;
     final public float workspaceValue = 0.8F;
 }

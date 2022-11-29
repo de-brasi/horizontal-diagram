@@ -108,7 +108,7 @@ public class CustomGraph {
 
             curLength = (curValue / maxValue) * workspace_len;
             // Если значение длины нулевое, то отрисовать маленький отрезок
-            curLength = Math.max(curLength, visualSettings.defaultValueRowLength);
+            curLength = Math.max(curLength, visualSettings.defaultValueBarLength);
             distanceFromAxisOX = distanceBetweenScales_y * curScale;
 
             workCanvas.drawRoundRect(
