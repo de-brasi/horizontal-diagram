@@ -138,7 +138,7 @@ public class Diagram extends View {
                 colorScheme.BACKGROUND.red,
                 colorScheme.BACKGROUND.green,
                 colorScheme.BACKGROUND.blue));
-        canvas.drawRoundRect(0, 0, width, height, 50, 50, paint);
+        canvas.drawRoundRect(0, 0, width, height, 10, 10, paint);
 
         final float STANDARD_SCALE_VALUE = 10F; // константа - максимальное отрисовываемое расстояние для min стороны
 
